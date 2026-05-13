@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* BOARD */
+.todo-board {
+  height: 100vh;
+  padding: 1.5em;
+
+  display: flex;
+  gap: 16px;
+
+  justify-content: center;
+  align-items: flex-start;
+
+  overflow-x: auto; /* fontos kisebb képernyőn */
+  background: #ddfdfb;
+}
+
+/* COLUMN */
+.todo-column {
+  flex: 1;
+  min-width: 280px;
+  max-width: 360px;
+  min-height: 200px;
+
+  background: white;
+  border: 1px solid #cfcfcf;
+  border-radius: 10px;
+
+  padding: 1em;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* CARD */
+.card {
+  width: 100%; /* EZ A LÉNYEG */
+  padding: .5em;
+  margin: 1em 0;
+
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+
+  background: #fff;
+  cursor: grab;
+}
