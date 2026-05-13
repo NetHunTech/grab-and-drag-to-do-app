@@ -1,9 +1,13 @@
-export default function Card() {
+import type { Todo } from "../../types/todo"
+
+export default function Card({ 
+  title, description, stage
+}: Todo) {
   return (
     <div className="card">
-      <h2>To-Do</h2>
-      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro dolores rerum maiores aliquam ducimus repellat quidem dignissimos nam iure ullam.</p>
-      <h3>In progress</h3>
+      <h2>{title}</h2>
+      {description && <p>{description}</p>}
+      <h3>{stage}</h3>
     </div>
   )
 }

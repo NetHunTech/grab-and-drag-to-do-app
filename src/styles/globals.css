@@ -24,14 +24,14 @@ html, body {
 }
 
 /* COLUMN */
-.todo-column {
+.base-column {
   flex: 1;
   min-width: 280px;
   max-width: 360px;
   min-height: 200px;
 
   background: white;
-  border: 1px solid #cfcfcf;
+  border: 2px solid #cfcfcf;
   border-radius: 10px;
 
   padding: 1em;
@@ -39,6 +39,21 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.todo-column {
+  background: rgb(255, 183, 183);
+  border: 2px solid #c23939;
+}
+
+.doing-column {
+  background: rgb(239, 255, 183);
+  border: 2px solid #b9c239;
+}
+
+.done-column {
+  background: rgb(197, 255, 183);
+  border: 2px solid #44c239;
 }
 
 /* CARD */
