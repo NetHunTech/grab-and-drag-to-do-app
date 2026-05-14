@@ -68,3 +68,59 @@ html, body {
   background: #fff;
   cursor: grab;
 }
+
+/* INPUT */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8em;
+  margin: .5em 1em;
+}
+
+header > h1 {
+  font-size: 4rem;
+}
+
+.todo-form {
+  border: 2px solid #cfcfcf;
+  border-radius: 8px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  gap: .5em;
+}
+
+.todo-form > input {
+  padding: .2em;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.todo-form > button {
+  padding: .5em;
+  width: 100px;
+  margin: 0 auto;
+  background: lightcyan;
+  border: 2px solid cadetblue;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.todo-form > button:hover {
+  background: rgb(192, 255, 255);
+  border: 2px solid rgb(30, 96, 99);
+}
+
+.todo-form > textarea {
+  resize: none;
+  padding: .2em;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.todo-form > input:focus, .todo-form > textarea:focus {
+  background: lightcyan;
+  outline: 1px solid cadetblue;
+}
