@@ -8,10 +8,15 @@ type Todo = {
 type TodoColumn = {
   name: string
   tasks: Todo[]
+  onDelete: (id: string) => void
 }
 
 type AddTodoProps = {
-  onAddTodo: (todo: Todo) => void;
-};
+  onAddTodo: (todo: Todo) => void
+}
 
-export type { Todo, TodoColumn, AddTodoProps }
+type TodoCardProps = Todo & {
+  onDelete: () => void
+}
+
+export type { Todo, TodoColumn, AddTodoProps, TodoCardProps }
