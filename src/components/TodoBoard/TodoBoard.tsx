@@ -11,10 +11,13 @@ export default function Board() {
     setTodos(prev => [...prev, newTodo])
   }
 
+  function delTodo(todoId: string) {
+    setTodos(prev => prev.filter(task => task.id !== todoId))
+  }
+
   const todo = todos.filter(task => task.stage === 'todo')
   const doing = todos.filter(task => task.stage === 'doing')
   const done = todos.filter(task => task.stage === 'done')
-
 
   return (
     <>
@@ -23,9 +26,9 @@ export default function Board() {
         <AddTodo onAddTodo={addTodo}/>
       </header>
       <main className="todo-board">
-        <Column name='todo' tasks={todo}/>
-        <Column name='doing' tasks={doing}/>
-        <Column name='done' tasks={done}/>
+        <Column name='todo' tasks={todo} onDelete={delTodo}/>
+        <Column name='doing' tasks={doing} onDelete={delTodo}/>
+        <Column name='done' tasks={done} onDelete={delTodo}/>
       </main>
     </>
   )
