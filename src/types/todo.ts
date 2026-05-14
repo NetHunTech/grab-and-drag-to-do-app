@@ -1,5 +1,5 @@
 type Todo = {
-  id: number
+  id: string
   title: string
   description?: string
   stage: 'todo' | 'doing' | 'done'
@@ -10,4 +10,8 @@ type TodoColumn = {
   tasks: Todo[]
 }
 
-export type { Todo, TodoColumn }
+type AddTodoProps = {
+  onAddTodo: (todo: Todo) => void;
+};
+
+export type { Todo, TodoColumn, AddTodoProps }

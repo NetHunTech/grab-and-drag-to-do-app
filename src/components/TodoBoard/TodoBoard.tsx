@@ -1,16 +1,32 @@
+import { useState } from "react"
 import { TodoDatas } from "../../mockTodos"
+import AddTodo from "../AddTodo/AddTodo"
 import Column from "./TodoColumn"
+import type { Todo } from "../../types/todo"
 
 export default function Board() {
-  const todo = TodoDatas.filter(task => task.stage === 'todo')
-  const doing = TodoDatas.filter(task => task.stage === 'doing')
-  const done = TodoDatas.filter(task => task.stage === 'done')
+  const [todos, setTodos] = useState<Todo[]>(TodoDatas)
+
+  function addTodo(newTodo: Todo) {
+    setTodos(prev => [...prev, newTodo])
+  }
+
+  const todo = todos.filter(task => task.stage === 'todo')
+  const doing = todos.filter(task => task.stage === 'doing')
+  const done = todos.filter(task => task.stage === 'done')
+
 
   return (
-    <main className="todo-board">
-      <Column name='todo' tasks={todo}/>
-      <Column name='doing' tasks={doing}/>
-      <Column name='done' tasks={done}/>
-    </main>
+    <>
+      <header>
+        {<h1>To-Do App</h1>}
+        <AddTodo onAddTodo={addTodo}/>
+      </header>
+      <main className="todo-board">
+        <Column name='todo' tasks={todo}/>
+        <Column name='doing' tasks={doing}/>
+        <Column name='done' tasks={done}/>
+      </main>
+    </>
   )
 }
