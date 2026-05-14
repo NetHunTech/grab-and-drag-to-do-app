@@ -1,7 +1,7 @@
 import Card from "./TodoCard"
 import type { Todo, TodoColumn } from "../../types/todo"
 
-export default function Column({ name, tasks, onDelete }: TodoColumn) {
+export default function Column({ name, tasks, onDelete, onMove }: TodoColumn) {
 
   const renderedTasks = tasks.map((task: Todo) => (
     <Card 
@@ -11,6 +11,7 @@ export default function Column({ name, tasks, onDelete }: TodoColumn) {
       description={task.description}
       stage={task.stage}
       onDelete={() => onDelete(task.id)}
+      onMove={onMove}
     />
   ))
 

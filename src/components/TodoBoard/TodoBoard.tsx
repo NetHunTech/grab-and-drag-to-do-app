@@ -15,6 +15,12 @@ export default function Board() {
     setTodos(prev => prev.filter(task => task.id !== todoId))
   }
 
+  function moveTodo(todoId: string, newStage: Todo['stage']) {
+    setTodos(prev => prev.map(task => 
+      task.id === todoId ? {...task, stage: newStage} : task
+    ))
+  }
+
   const todo = todos.filter(task => task.stage === 'todo')
   const doing = todos.filter(task => task.stage === 'doing')
   const done = todos.filter(task => task.stage === 'done')
@@ -26,9 +32,24 @@ export default function Board() {
         <AddTodo onAddTodo={addTodo}/>
       </header>
       <main className="todo-board">
-        <Column name='todo' tasks={todo} onDelete={delTodo}/>
-        <Column name='doing' tasks={doing} onDelete={delTodo}/>
-        <Column name='done' tasks={done} onDelete={delTodo}/>
+        <Column 
+          name='todo' 
+          tasks={todo} 
+          onDelete={delTodo} 
+          onMove={moveTodo}
+        />
+        <Column 
+          name='doing' 
+          tasks={doing} 
+          onDelete={delTodo} 
+          onMove={moveTodo}
+        />
+        <Column 
+          name='done' 
+          tasks={done} 
+          onDelete={delTodo} 
+          onMove={moveTodo}
+        />
       </main>
     </>
   )
