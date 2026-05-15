@@ -1,0 +1,11 @@
+Learn Python
+Learning the language to make an AI
+
+Learn Java
+Learning the language to make mobile apps
+
+Learn C
+Learning the language to make low level systems
+
+Learn HTML
+Learning the language to make websites

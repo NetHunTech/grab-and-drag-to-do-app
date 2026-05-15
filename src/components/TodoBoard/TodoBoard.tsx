@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { TodoDatas } from "../../mockTodos"
+import {
+  DndContext,
+  closestCenter,
+  DragOverlay
+} from "@dnd-kit/core"
+
 import AddTodo from "../AddTodo/AddTodo"
 import Column from "./TodoColumn"
 import type { Todo } from "../../types/todo"
@@ -7,13 +12,15 @@ import type { Todo } from "../../types/todo"
 export default function Board() {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const storedTodos = localStorage.getItem('tasks')
-
-    if (storedTodos) {
-      return JSON.parse(storedTodos)
-    }
-
-    return TodoDatas
+    return storedTodos ? JSON.parse(storedTodos) : []
   })
+
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const activeTodo = todos.find(task => task.id === activeId)
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(todos)) 
+  }, [todos])
 
   function addTodo(newTodo: Todo) {
     setTodos(prev => [...prev, newTodo])
@@ -29,13 +36,23 @@ export default function Board() {
     ))
   }
 
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(todos)) 
-  }, [todos])
+  function onDragStart({ active }: any) {
+    setActiveId(String(active.id))
+  }
 
-  const todo = todos.filter(task => task.stage === 'todo')
-  const doing = todos.filter(task => task.stage === 'doing')
-  const done = todos.filter(task => task.stage === 'done')
+  function onDragEnd({ active, over }: any) {
+    if (!over) return
+
+    const stage = over.data?.current?.stage
+
+    if (!stage) return
+
+    moveTodo(String(active.id), stage)
+  }
+
+  function onDragCancel() {
+    setActiveId(null)
+  }
 
   return (
     <>
@@ -43,26 +60,39 @@ export default function Board() {
         {<h1>To-Do App</h1>}
         <AddTodo onAddTodo={addTodo}/>
       </header>
-      <main className="todo-board">
-        <Column 
-          name='todo' 
-          tasks={todo} 
-          onDelete={delTodo} 
-          onMove={moveTodo}
-        />
-        <Column 
-          name='doing' 
-          tasks={doing} 
-          onDelete={delTodo} 
-          onMove={moveTodo}
-        />
-        <Column 
-          name='done' 
-          tasks={done} 
-          onDelete={delTodo} 
-          onMove={moveTodo}
-        />
-      </main>
+      <DndContext
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onDragCancel={onDragCancel}
+        collisionDetection={closestCenter}
+      >
+        <main className="todo-board">
+          <Column 
+            name='todo' 
+            tasks={todos.filter(task => task.stage === 'todo')} 
+            onDelete={delTodo} 
+          />
+          <Column 
+            name='doing' 
+            tasks={todos.filter(task => task.stage === 'doing')} 
+            onDelete={delTodo} 
+          />
+          <Column 
+            name='done' 
+            tasks={todos.filter(task => task.stage === 'done')} 
+            onDelete={delTodo} 
+          />
+        </main>
+
+      <DragOverlay>
+        {activeId && activeTodo ? (
+          <div className="card dragging-preview">
+            <h2>{activeTodo.title}</h2>
+            {activeTodo.description && <p>{activeTodo.description}</p>}
+          </div>
+        ) : null}
+      </DragOverlay>
+      </DndContext>
     </>
   )
 }

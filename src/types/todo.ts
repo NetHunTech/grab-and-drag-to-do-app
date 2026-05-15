@@ -9,7 +9,6 @@ type TodoColumn = {
   name: string
   tasks: Todo[]
   onDelete: (id: string) => void
-  onMove: (id: string, stage: Todo["stage"]) => void
 }
 
 type AddTodoProps = {
@@ -18,7 +17,6 @@ type AddTodoProps = {
 
 type TodoCardProps = Todo & {
   onDelete: () => void
-  onMove: (id: string, stage: Todo["stage"]) => void
 }
 
 export type { Todo, TodoColumn, AddTodoProps, TodoCardProps }

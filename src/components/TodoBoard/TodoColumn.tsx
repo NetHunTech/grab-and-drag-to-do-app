@@ -1,7 +1,12 @@
 import Card from "./TodoCard"
 import type { Todo, TodoColumn } from "../../types/todo"
+import { useDroppable } from "@dnd-kit/core"
 
-export default function Column({ name, tasks, onDelete, onMove }: TodoColumn) {
+export default function Column({ name, tasks, onDelete }: TodoColumn) {
+  const {setNodeRef, isOver} = useDroppable({
+    id: name,
+    data: { stage: name }
+  })
 
   const renderedTasks = tasks.map((task: Todo) => (
     <Card 
@@ -11,7 +16,6 @@ export default function Column({ name, tasks, onDelete, onMove }: TodoColumn) {
       description={task.description}
       stage={task.stage}
       onDelete={() => onDelete(task.id)}
-      onMove={onMove}
     />
   ))
 
@@ -19,7 +23,13 @@ export default function Column({ name, tasks, onDelete, onMove }: TodoColumn) {
     <div className={`${name}-column base-column`}>
       <h1>{name}</h1>
 
-      <div>
+      <div 
+        ref={setNodeRef}
+        style={{
+          minHeight: "100%",
+          background: isOver ? 'lightblue' : 'white'
+        }}
+      >
         {renderedTasks}
       </div>
     </div>
