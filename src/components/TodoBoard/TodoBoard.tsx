@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react"
-import { DndContext, closestCenter } from "@dnd-kit/core"
+import {
+  DndContext,
+  closestCenter,
+  DragOverlay
+} from "@dnd-kit/core"
+
 import AddTodo from "../AddTodo/AddTodo"
 import Column from "./TodoColumn"
 import type { Todo } from "../../types/todo"
@@ -9,6 +14,13 @@ export default function Board() {
     const storedTodos = localStorage.getItem('tasks')
     return storedTodos ? JSON.parse(storedTodos) : []
   })
+
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const activeTodo = todos.find(task => task.id === activeId)
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(todos)) 
+  }, [todos])
 
   function addTodo(newTodo: Todo) {
     setTodos(prev => [...prev, newTodo])
@@ -24,49 +36,62 @@ export default function Board() {
     ))
   }
 
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(todos)) 
-  }, [todos])
+  function onDragStart({ active }: any) {
+    setActiveId(String(active.id))
+  }
 
   function onDragEnd({ active, over }: any) {
     if (!over) return
 
-    console.log("ACTIVE:", active.id)
-    console.log("OVER:", over.id)
+    const stage = over.data?.current?.stage
 
-    moveTodo(String(active.id), over.id as Todo["stage"])
+    if (!stage) return
+
+    moveTodo(String(active.id), stage)
+  }
+
+  function onDragCancel() {
+    setActiveId(null)
   }
 
   return (
     <>
-        <header>
-          {<h1>To-Do App</h1>}
-          <AddTodo onAddTodo={addTodo}/>
-        </header>
+      <header>
+        {<h1>To-Do App</h1>}
+        <AddTodo onAddTodo={addTodo}/>
+      </header>
       <DndContext
-        collisionDetection={closestCenter}
+        onDragStart={onDragStart}
         onDragEnd={onDragEnd}
+        onDragCancel={onDragCancel}
+        collisionDetection={closestCenter}
       >
         <main className="todo-board">
           <Column 
             name='todo' 
             tasks={todos.filter(task => task.stage === 'todo')} 
             onDelete={delTodo} 
-            onMove={moveTodo}
           />
           <Column 
             name='doing' 
             tasks={todos.filter(task => task.stage === 'doing')} 
             onDelete={delTodo} 
-            onMove={moveTodo}
           />
           <Column 
             name='done' 
             tasks={todos.filter(task => task.stage === 'done')} 
             onDelete={delTodo} 
-            onMove={moveTodo}
           />
         </main>
+
+      <DragOverlay>
+        {activeId && activeTodo ? (
+          <div className="card dragging-preview">
+            <h2>{activeTodo.title}</h2>
+            {activeTodo.description && <p>{activeTodo.description}</p>}
+          </div>
+        ) : null}
+      </DragOverlay>
       </DndContext>
     </>
   )
