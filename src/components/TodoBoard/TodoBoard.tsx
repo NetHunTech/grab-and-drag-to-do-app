@@ -1,11 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { TodoDatas } from "../../mockTodos"
 import AddTodo from "../AddTodo/AddTodo"
 import Column from "./TodoColumn"
 import type { Todo } from "../../types/todo"
 
 export default function Board() {
-  const [todos, setTodos] = useState<Todo[]>(TodoDatas)
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const storedTodos = localStorage.getItem('tasks')
+
+    if (storedTodos) {
+      return JSON.parse(storedTodos)
+    }
+
+    return TodoDatas
+  })
 
   function addTodo(newTodo: Todo) {
     setTodos(prev => [...prev, newTodo])
@@ -20,6 +28,10 @@ export default function Board() {
       task.id === todoId ? {...task, stage: newStage} : task
     ))
   }
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(todos)) 
+  }, [todos])
 
   const todo = todos.filter(task => task.stage === 'todo')
   const doing = todos.filter(task => task.stage === 'doing')
