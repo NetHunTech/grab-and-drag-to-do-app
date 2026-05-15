@@ -14,15 +14,16 @@ export default function Card({
     id: String(id)
   });
 
+
   return (
     <div 
       ref={setNodeRef} 
       {...listeners}
       {...attributes}
-      className="card"
+      className={`card`}
       style={{
         transform: transform ? CSS.Transform.toString(transform) : undefined,
-        touchAction: "none"
+        touchAction: "none",
       }}
     >
       <h2>{title}</h2>
