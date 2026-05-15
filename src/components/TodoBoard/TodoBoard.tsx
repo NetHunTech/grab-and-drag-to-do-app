@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { TodoDatas } from "../../mockTodos"
+import { DndContext, closestCenter } from "@dnd-kit/core"
 import AddTodo from "../AddTodo/AddTodo"
 import Column from "./TodoColumn"
 import type { Todo } from "../../types/todo"
@@ -7,12 +7,7 @@ import type { Todo } from "../../types/todo"
 export default function Board() {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const storedTodos = localStorage.getItem('tasks')
-
-    if (storedTodos) {
-      return JSON.parse(storedTodos)
-    }
-
-    return TodoDatas
+    return storedTodos ? JSON.parse(storedTodos) : []
   })
 
   function addTodo(newTodo: Todo) {
@@ -33,36 +28,46 @@ export default function Board() {
     localStorage.setItem('tasks', JSON.stringify(todos)) 
   }, [todos])
 
-  const todo = todos.filter(task => task.stage === 'todo')
-  const doing = todos.filter(task => task.stage === 'doing')
-  const done = todos.filter(task => task.stage === 'done')
+  function onDragEnd({ active, over }: any) {
+    if (!over) return
+
+    console.log("ACTIVE:", active.id)
+    console.log("OVER:", over.id)
+
+    moveTodo(String(active.id), over.id as Todo["stage"])
+  }
 
   return (
     <>
-      <header>
-        {<h1>To-Do App</h1>}
-        <AddTodo onAddTodo={addTodo}/>
-      </header>
-      <main className="todo-board">
-        <Column 
-          name='todo' 
-          tasks={todo} 
-          onDelete={delTodo} 
-          onMove={moveTodo}
-        />
-        <Column 
-          name='doing' 
-          tasks={doing} 
-          onDelete={delTodo} 
-          onMove={moveTodo}
-        />
-        <Column 
-          name='done' 
-          tasks={done} 
-          onDelete={delTodo} 
-          onMove={moveTodo}
-        />
-      </main>
+        <header>
+          {<h1>To-Do App</h1>}
+          <AddTodo onAddTodo={addTodo}/>
+        </header>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+      >
+        <main className="todo-board">
+          <Column 
+            name='todo' 
+            tasks={todos.filter(task => task.stage === 'todo')} 
+            onDelete={delTodo} 
+            onMove={moveTodo}
+          />
+          <Column 
+            name='doing' 
+            tasks={todos.filter(task => task.stage === 'doing')} 
+            onDelete={delTodo} 
+            onMove={moveTodo}
+          />
+          <Column 
+            name='done' 
+            tasks={todos.filter(task => task.stage === 'done')} 
+            onDelete={delTodo} 
+            onMove={moveTodo}
+          />
+        </main>
+      </DndContext>
     </>
   )
 }
