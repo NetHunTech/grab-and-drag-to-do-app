@@ -7,7 +7,8 @@ import {
 
 import AddTodo from "../AddTodo/AddTodo"
 import Column from "./TodoColumn"
-import type { Todo } from "../../types/todo"
+import Card from "./TodoCard"
+import type { Todo, ActiveId } from "../../types/todo"
 
 export default function Board() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -41,13 +42,21 @@ export default function Board() {
   }
 
   function onDragEnd({ active, over }: any) {
-    if (!over) return
+    if (!over) {
+      setActiveId(null)
+      return
+    }
 
     const stage = over.data?.current?.stage
 
-    if (!stage) return
+    if (!stage) {
+      setActiveId(null)
+      return
+    }
 
     moveTodo(String(active.id), stage)
+
+    setActiveId(null)
   }
 
   function onDragCancel() {
@@ -71,25 +80,31 @@ export default function Board() {
             name='todo' 
             tasks={todos.filter(task => task.stage === 'todo')} 
             onDelete={delTodo} 
+            activeId={activeId}
           />
           <Column 
             name='doing' 
             tasks={todos.filter(task => task.stage === 'doing')} 
             onDelete={delTodo} 
+            activeId={activeId}
           />
           <Column 
             name='done' 
             tasks={todos.filter(task => task.stage === 'done')} 
             onDelete={delTodo} 
+            activeId={activeId}
           />
         </main>
 
       <DragOverlay>
-        {activeId && activeTodo ? (
-          <div className="card dragging-preview">
-            <h2>{activeTodo.title}</h2>
-            {activeTodo.description && <p>{activeTodo.description}</p>}
-          </div>
+        {activeTodo ? (
+          <Card
+            id={activeTodo.id}
+            title={activeTodo.title}
+            description={activeTodo.description}
+            stage={activeTodo.stage}
+            onDelete={() => {}}
+          />
         ) : null}
       </DragOverlay>
       </DndContext>

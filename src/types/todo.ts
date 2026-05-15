@@ -5,11 +5,6 @@ type Todo = {
   stage: 'todo' | 'doing' | 'done'
 }
 
-type TodoColumn = {
-  name: string
-  tasks: Todo[]
-  onDelete: (id: string) => void
-}
 
 type AddTodoProps = {
   onAddTodo: (todo: Todo) => void
@@ -19,4 +14,12 @@ type TodoCardProps = Todo & {
   onDelete: () => void
 }
 
-export type { Todo, TodoColumn, AddTodoProps, TodoCardProps }
+type ActiveId = {activeId: string | null}
+
+type TodoColumn = ActiveId &{
+  name: string
+  tasks: Todo[]
+  onDelete: (id: string) => void
+}
+
+export type { Todo, TodoColumn, AddTodoProps, TodoCardProps, ActiveId }
