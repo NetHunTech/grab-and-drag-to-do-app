@@ -9,7 +9,10 @@ import {
 export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) {
   const {setNodeRef, isOver} = useDroppable({
     id: name,
-    data: { stage: name }
+    data: {
+      type: 'column',
+      stage: name 
+    }
   })
 
   const renderedTasks = tasks.map((task: Todo) => {
@@ -50,7 +53,7 @@ export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) 
           flexDirection: "column",
           gap: "8px",
           minHeight: "100%",
-          background: isOver ? "#e0f2fe" : "#fff"
+          background: isOver ? "#a4dbff" : "#fff"
         }}
       >
         <SortableContext 

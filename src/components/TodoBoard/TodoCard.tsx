@@ -13,6 +13,10 @@ export default function Card({
     transition
   } = useSortable({
     id,
+    data: {
+      type: 'card',
+      stage 
+    }
   })
 
   return (
