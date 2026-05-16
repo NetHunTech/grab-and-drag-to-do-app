@@ -41,6 +41,10 @@ html, body {
   gap: 10px;
 }
 
+.container-column {
+  padding: .5em;
+}
+
 .todo-column {
   background: rgb(255, 183, 183);
   border: 2px solid #c23939;

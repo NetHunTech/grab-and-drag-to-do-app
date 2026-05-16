@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Todo } from "../types/todo";
+import { arrayMove } from "@dnd-kit/sortable";
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -28,8 +29,12 @@ export function useTodos() {
     ))
   }
 
+  function posTodo(todoId: string) {
+    return todos.findIndex(todo => todo.id === todoId)
+  }
+
   function onDragStart({ active }: any) {
-    setActiveId(String(active.id))
+    setActiveId(active.id)
   }
 
   function onDragEnd({ active, over }: any) {
@@ -40,12 +45,12 @@ export function useTodos() {
 
     const stage = over.data?.current?.stage
 
-    if (!stage) {
+    if (stage) {
       setActiveId(null)
       return
     }
 
-    moveTodo(String(active.id), stage)
+    moveTodo(active.id, stage)
 
     setActiveId(null)
   }

@@ -1,4 +1,4 @@
-import { useDraggable } from "@dnd-kit/core"
+import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from '@dnd-kit/utilities'
 import type { TodoCardProps } from "../../types/todo"
 
@@ -9,11 +9,11 @@ export default function Card({
     attributes,
     listeners,
     setNodeRef,
-    transform
-  } = useDraggable({
-    id: String(id)
-  });
-
+    transform,
+    transition
+  } = useSortable({
+    id,
+  })
 
   return (
     <div 
@@ -23,7 +23,7 @@ export default function Card({
       className={`card`}
       style={{
         transform: transform ? CSS.Transform.toString(transform) : undefined,
-        touchAction: "none",
+        transition
       }}
     >
       <h2>{title}</h2>

@@ -1,6 +1,10 @@
-import Card from "./TodoCard"
 import type { Todo, TodoColumn } from "../../types/todo"
+import Card from "./TodoCard"
 import { useDroppable } from "@dnd-kit/core"
+import { 
+  SortableContext, 
+  verticalListSortingStrategy 
+} from "@dnd-kit/sortable"
 
 export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) {
   const {setNodeRef, isOver} = useDroppable({
@@ -8,9 +12,7 @@ export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) 
     data: { stage: name }
   })
 
-  const renderedTasks = tasks
-    .filter(task => task.id !== activeId)
-    .map((task: Todo) => (
+  const renderedTasks = tasks.map((task: Todo) => (
       <Card 
         key={task.id}
         id={task.id}
@@ -20,21 +22,31 @@ export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) 
         onDelete={() => onDelete(task.id)}
       />
     ))
+  
+
+  const taskIds = tasks.map(task => task.id)
 
   return (
     <div className={`${name}-column base-column`}>
       <h1>{name}</h1>
 
       <div 
+        className="container-column"
         ref={setNodeRef}
         style={{
           display: "flex",
           flexDirection: "column",
           gap: "8px",
-          minHeight: "100%"
+          minHeight: "100%",
+          background: isOver ? "#e0f2fe" : "#fff"
         }}
       >
-        {renderedTasks}
+        <SortableContext 
+          items={taskIds} 
+          strategy={verticalListSortingStrategy}
+        >
+          {renderedTasks}
+        </SortableContext>
       </div>
     </div>
   )
