@@ -19,15 +19,16 @@ export default function Card({
     }
   })
 
+
   return (
     <div 
       ref={setNodeRef} 
       {...listeners}
       {...attributes}
-      className={`card`}
+      className={`card card-${stage}`}
       style={{
         transform: transform ? CSS.Transform.toString(transform) : undefined,
-        transition
+        transition,
       }}
     >
       <h2>{title}</h2>
