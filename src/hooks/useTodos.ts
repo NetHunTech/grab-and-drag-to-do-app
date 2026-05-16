@@ -39,10 +39,13 @@ export function useTodos() {
       return
     }
 
-    const overStage = over.data?.current?.stage
+    const overData = over.data?.current
+    const activeTodo = todos.find(t => t.id === active.id)
 
-    if (overStage) {
-      moveTodo(active.id, overStage)
+    if (!activeTodo) return
+
+    if (overData?.type === 'column') {
+      moveTodo(active.id, overData.stage)
       setActiveId(null)
       return
     }
