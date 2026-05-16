@@ -12,18 +12,29 @@ export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) 
     data: { stage: name }
   })
 
-  const renderedTasks = tasks
-    .map((task: Todo) => (
-      <Card 
+  const renderedTasks = tasks.map((task: Todo) => {
+    const isDragging = task.id === activeId
+
+    return (
+      <div
         key={task.id}
-        id={task.id}
-        title={task.title}
-        description={task.description}
-        stage={task.stage}
-        onDelete={() => onDelete(task.id)}
-      />
-    ))
-  
+        style={{
+          opacity: isDragging ? 0.2 : 1,
+          transform: isDragging ? "scale(0.98)" : "scale(1)",
+          transition: "opacity 150ms ease, transform 150ms ease",
+          pointerEvents: isDragging ? "none" : "auto"
+        }}
+      >
+        <Card
+          id={task.id}
+          title={task.title}
+          description={task.description}
+          stage={task.stage}
+          onDelete={() => onDelete(task.id)}
+        />
+      </div>
+    )
+  })
 
   const taskIds = tasks.map(task => task.id)
 
