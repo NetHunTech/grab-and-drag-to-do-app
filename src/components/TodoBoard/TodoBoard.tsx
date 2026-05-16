@@ -21,6 +21,12 @@ export default function Board() {
     onDragCancel
   } = useTodos()
 
+  const columns = {
+    todo: todos.filter(task => task.stage === 'todo'),
+    doing: todos.filter(task => task.stage === 'doing'),
+    done: todos.filter(task => task.stage === 'done')
+  }
+
   return (
     <>
       <header>
@@ -36,19 +42,19 @@ export default function Board() {
         <main className="todo-board">
           <Column 
             name='todo' 
-            tasks={todos.filter(task => task.stage === 'todo')} 
+            tasks={columns.todo} 
             onDelete={delTodo} 
             activeId={activeId}
           />
           <Column 
             name='doing' 
-            tasks={todos.filter(task => task.stage === 'doing')} 
+            tasks={columns.doing} 
             onDelete={delTodo} 
             activeId={activeId}
           />
           <Column 
             name='done' 
-            tasks={todos.filter(task => task.stage === 'done')} 
+            tasks={columns.done} 
             onDelete={delTodo} 
             activeId={activeId}
           />
@@ -56,13 +62,23 @@ export default function Board() {
 
         <DragOverlay>
           {activeTodo ? (
-            <Card
-              id={activeTodo.id}
-              title={activeTodo.title}
-              description={activeTodo.description}
-              stage={activeTodo.stage}
-              onDelete={() => {}}
-            />
+            <div
+              key={activeTodo.id}
+              style={{
+                transform:"scale(1.2)",
+                transition: "opacity 150ms ease, transform 150ms ease",
+                boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                borderRadius: "8px"
+              }}
+            >
+              <Card
+                id={activeTodo.id}
+                title={activeTodo.title}
+                description={activeTodo.description}
+                stage={activeTodo.stage}
+                onDelete={() => {}}
+              />
+            </div>
           ) : null}
         </DragOverlay>
       </DndContext>

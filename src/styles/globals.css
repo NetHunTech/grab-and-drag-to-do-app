@@ -19,7 +19,7 @@ html, body {
   justify-content: center;
   align-items: flex-start;
 
-  overflow-x: auto; /* fontos kisebb képernyőn */
+  overflow-x: auto; 
   background: #ddfdfb;
 }
 
@@ -63,7 +63,7 @@ html, body {
 /* CARD */
 .card {
   position: relative;
-  width: 100%; /* EZ A LÉNYEG */
+  width: 100%;
   padding: .5em;
   margin: 1em 0;
 
@@ -72,6 +72,24 @@ html, body {
 
   background: #fff;
   cursor: grab;
+}
+
+.card-todo {
+  background: #c06c6c;
+  color: rgb(253, 163, 163);
+  text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+}
+
+.card-doing {
+  background: #c8ce74;
+  color: lightyellow;
+  text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+}
+
+.card-done {
+  background: #82c77c;
+  color: rgb(218, 255, 218);
+  text-shadow: 0 0 3px #000000, 0 0 5px #000000;
 }
 
 .card > button {
