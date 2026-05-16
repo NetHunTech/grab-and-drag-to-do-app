@@ -21,21 +21,25 @@ export default function Card({
 
 
   return (
-    <div 
-      ref={setNodeRef} 
-      {...listeners}
-      {...attributes}
-      className={`card card-${stage}`}
-      style={{
-        transform: transform ? CSS.Transform.toString(transform) : undefined,
-        transition,
-      }}
-    >
-      <h2>{title}</h2>
-      {description && <p>{description}</p>}
-      <h3>{stage}</h3>
-      <button onClick={onDelete}>X</button>
+    <div className={`card card-${stage}`}>
+      <div 
+        ref={setNodeRef} 
+        {...listeners}
+        {...attributes}
+        
+        style={{
+          transform: transform ? CSS.Transform.toString(transform) : undefined,
+          transition,
+        }}
+      >
+        <h2>{title}</h2>
+        {description && <p>{description}</p>}
 
+      </div >
+      <div className="card-info">
+        <h3>{stage}</h3>
+        <button onClick={onDelete}>X</button>
+      </div>
     </div>
   )
 }
