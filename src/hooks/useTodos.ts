@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Todo } from "../types/todo";
+import { reorderTodos } from "../utils/reorder";
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -29,7 +30,7 @@ export function useTodos() {
   }
 
   function onDragStart({ active }: any) {
-    setActiveId(String(active.id))
+    setActiveId(active.id)
   }
 
   function onDragEnd({ active, over }: any) {
@@ -38,14 +39,15 @@ export function useTodos() {
       return
     }
 
-    const stage = over.data?.current?.stage
+    const overStage = over.data?.current?.stage
 
-    if (!stage) {
+    if (overStage) {
+      moveTodo(active.id, overStage)
       setActiveId(null)
       return
     }
 
-    moveTodo(String(active.id), stage)
+    setTodos(prev => reorderTodos(prev, active.id, over.id))
 
     setActiveId(null)
   }
