@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Todo } from "../types/todo";
-import { arrayMove } from "@dnd-kit/sortable";
+import { reorderTodos } from "../utils/reorder";
 
 export function useTodos() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -29,10 +29,6 @@ export function useTodos() {
     ))
   }
 
-  function posTodo(todoId: string) {
-    return todos.findIndex(todo => todo.id === todoId)
-  }
-
   function onDragStart({ active }: any) {
     setActiveId(active.id)
   }
@@ -43,14 +39,15 @@ export function useTodos() {
       return
     }
 
-    const stage = over.data?.current?.stage
+    const overStage = over.data?.current?.stage
 
-    if (stage) {
+    if (overStage) {
+      moveTodo(active.id, overStage)
       setActiveId(null)
       return
     }
 
-    moveTodo(active.id, stage)
+    setTodos(prev => reorderTodos(prev, active.id, over.id))
 
     setActiveId(null)
   }

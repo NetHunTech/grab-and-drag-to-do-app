@@ -12,7 +12,8 @@ export default function Column({ name, tasks, onDelete, activeId }: TodoColumn) 
     data: { stage: name }
   })
 
-  const renderedTasks = tasks.map((task: Todo) => (
+  const renderedTasks = tasks
+    .map((task: Todo) => (
       <Card 
         key={task.id}
         id={task.id}
